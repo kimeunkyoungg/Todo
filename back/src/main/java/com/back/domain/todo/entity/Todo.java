@@ -2,12 +2,10 @@ package com.back.domain.todo.entity;
 
 
 import com.back.domain.user.entity.User;
-import com.back.domain.workspace.entity.WorkSpaceType;
 import com.back.domain.workspace.entity.Workspace;
 import com.back.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
