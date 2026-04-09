@@ -4,7 +4,6 @@ import com.back.domain.user.entity.User;
 import com.back.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,6 @@ public class Workspace extends BaseEntity {
 
     @Column(nullable = false, length = 100)
     private String title;
-
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
