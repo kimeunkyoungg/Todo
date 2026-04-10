@@ -6,6 +6,7 @@ import com.back.domain.workspace.entity.Workspace;
 import com.back.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,13 +28,13 @@ public class Todo extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private LocalDateTime dueDate;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private LocalDateTime startAt;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private LocalDateTime endAt;
 
     private LocalDateTime deletedAt;
@@ -59,6 +60,22 @@ public class Todo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
+
+    @Builder
+    public Todo(String title, String content, LocalDateTime dueDate, LocalDateTime startAt,
+                LocalDateTime endAt, Priority priority, TodoStatus status, User creator,
+                User assignee, Workspace workspace) {
+        this.title = title;
+        this.content = content;
+        this.dueDate = dueDate;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.priority = priority;
+        this.status = status;
+        this.creator = creator;
+        this.assignee = assignee;
+        this.workspace = workspace;
+    }
 
 
 
