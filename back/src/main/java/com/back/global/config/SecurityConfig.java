@@ -39,8 +39,14 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         // 인증이 필요한 엔드포인트 설정
-                        .requestMatchers("/h2-console/**", "/api/auth/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/h2-console/**",
+                                "/api/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
 
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
