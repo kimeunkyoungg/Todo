@@ -1,6 +1,5 @@
 package com.back.domain.workspace.entity;
 
-import com.back.domain.user.entity.MemberRole;
 import com.back.domain.user.entity.User;
 import com.back.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -30,7 +29,7 @@ public class WorkspaceMember extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MemberRole role;
+    private WorkspaceMemberRole role;
 
 
 }
