@@ -4,6 +4,7 @@ import com.back.domain.user.entity.UserSystemRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -69,6 +70,8 @@ public class JwtProvider {
             log.warn("지원하지 않는 JWT: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             log.warn("잘못된 형식의 JWT: {}", e.getMessage());
+        } catch (SignatureException e) {
+            log.warn("잘못된 JWT 서명: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             log.warn("빈 JWT 클레임: {}", e.getMessage());
         }
