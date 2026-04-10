@@ -17,27 +17,28 @@ import java.util.Date;
 public class JwtProvider {
 
     private static final String CLAIM_ROLE = "role";
+    private static final String CLAIM_USER_ID = "userId";
 
     @Value("${jwt.secret}")
     private String secretKey;
 
-    @Value("${jwt.access-token-expiration")
+    @Value("${jwt.access-token-expiration}")
     private long accessTokenExpiration;
 
-    @Value("${jwt.refresh-token-expiration")
+    @Value("${jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
 
     // === 토큰 생성 ==
 
-    public String createAccessToken(String email, UserSystemRole role) {
-        return buildToken(email, role.name(), accessTokenExpiration);
+    public String createAccessToken(Long userId, String email, UserSystemRole role) {
+        return buildToken(userId, email, role.name(), accessTokenExpiration);
     }
 
     public String createRefreshToken(String email) {
-        return buildToken(email, null, refreshTokenExpiration);
+        return buildToken(null, email, null, refreshTokenExpiration);
     }
 
-    private String buildToken(String email, String role, long expiration) {
+    private String buildToken(Long userId, String email, String role, long expiration) {
         Date now = new Date();
 
         JwtBuilder builder = Jwts.builder()
@@ -45,6 +46,10 @@ public class JwtProvider {
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + expiration))
                 .signWith(getSigningKey());
+
+        if (userId != null) {
+            builder.claim(CLAIM_USER_ID, userId);
+        }
 
         if (role != null) {
             builder.claim(CLAIM_ROLE, role);
@@ -80,6 +85,10 @@ public class JwtProvider {
     public UserSystemRole getRole(String token) {
         String role = getClaim(token).get(CLAIM_ROLE, String.class);
         return UserSystemRole.valueOf(role);
+    }
+
+    public Long getUserId(String token) {
+        return getClaim(token).get(CLAIM_USER_ID, Long.class);
     }
 
     // === 내부 메서드 ===

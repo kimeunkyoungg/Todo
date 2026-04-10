@@ -8,13 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -55,11 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 인증 객체 Authentication 생성
     private Authentication buildAuthentication(String token) {
+        Long userId = jwtProvider.getUserId(token);
         String email = jwtProvider.getEmail(token);
         UserSystemRole role = jwtProvider.getRole(token);
 
-        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role.name()));
-        return new UsernamePasswordAuthenticationToken(email, null, authorities);
+        CustomUserDetails userDetails = new CustomUserDetails(userId, email, role);
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
 
