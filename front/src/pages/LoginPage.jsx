@@ -4,11 +4,8 @@ import { FolderKanban, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { login, signup } from '@/api/auth'
 
-const DEMO_ACCOUNT = {
-  email: 'demo@taskflow.com',
-  password: 'demo1234',
-}
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -20,6 +17,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  
 
   // 회원가입 상태
   const [regEmail, setRegEmail] = useState('')
@@ -35,6 +33,13 @@ export default function LoginPage() {
     setMode(nextMode)
     setError('')
     setRegError('')
+    setRegEmail('')
+    setRegName('')
+    setRegPassword('')
+    setRegPasswordConfirm('')
+    setShowPassword(false)
+    setShowRegPassword(false)
+    setShowRegPasswordConfirm(false)
   }
 
   const handleLogin = async (e) => {
@@ -42,20 +47,16 @@ export default function LoginPage() {
     setError('')
     setIsLoading(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    if (email === DEMO_ACCOUNT.email && password === DEMO_ACCOUNT.password) {
-      sessionStorage.setItem('user', JSON.stringify({ name: '데모 사용자', email: email }))
+    try {
+      const data = await login(email, password)
+      localStorage.setItem('accessToken', data.accessToken)
       navigate('/dashboard')
-    } else {
-      setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+    } catch(err) {
+      setError(err.message)
+    } finally {
       setIsLoading(false)
     }
-  }
 
-  const handleDemoLogin = () => {
-    setEmail(DEMO_ACCOUNT.email)
-    setPassword(DEMO_ACCOUNT.password)
   }
 
   const handleRegister = async (e) => {
@@ -66,19 +67,26 @@ export default function LoginPage() {
       setRegError('비밀번호가 일치하지 않습니다.')
       return
     }
-    if (regPassword.length < 8) {
-      setRegError('비밀번호는 8자 이상이어야 합니다.')
-      return
+
+    // if (regPassword.length < 8) {
+    //   setRegError('비밀번호는 8자 이상이어야 합니다.')
+    //   return
+    // }
+
+    try { 
+      await signup(regEmail, regPassword, regName)
+      alert("회원가입이 완료되었습니다. 로그인해주세요.'")
+      switchMode('login')
+      
+      setEmail(regEmail)
+
+    } catch (err) {
+      setRegError(err.message)
+
+    } finally {
+      setIsRegLoading(false)
     }
 
-    setIsRegLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    // TODO: 실제 회원가입 API 연동
-    setIsRegLoading(false)
-    alert('회원가입이 완료되었습니다. 로그인해주세요.')
-    switchMode('login')
-    setEmail(regEmail)
   }
 
   return (
