@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 @Getter
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL) //null 값 제외
 public class ApiResponse<T> {
 
     private final boolean success;
     private final T data;
+    // message 추가 고려
 
     private ApiResponse(boolean success, T data) {
         this.success = success;
