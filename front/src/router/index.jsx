@@ -4,5 +4,12 @@ import DashboardPage from '@/pages/DashboardPage';
 
 export const router = createBrowserRouter([
     {path: '/', element: <LoginPage />},
-    {path: '/dashboard', element: <DashboardPage />},
+    {
+      element: <AppLayout />, //Header를 포함한 레이아웃
+      children: [
+        {path: '/dashboard', element: <DashboardPage />},
+        // 로그인 후  페이지는 여기에 추가 예정
+      ],  
+    },
+    
 ])
