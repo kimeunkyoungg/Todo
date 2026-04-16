@@ -29,6 +29,8 @@ function NavItem({ icon: Icon, label, active }) {
 
 export default function Sidebar({ workspaces, currentWorkspaceId, onWorkspaceChange }) {
     const [expanded, setExpanded] = useState(true)
+    const [email, setEmail] = useState('')
+    const [name, setName] = useState('')
 
     return (
         <aside className="w-60 shrink-0 flex flex-col h-full bg-sidebar border-r border-sidebar-border">
@@ -106,7 +108,7 @@ export default function Sidebar({ workspaces, currentWorkspaceId, onWorkspaceCha
             <div className="border-t border-sidebar-border p-3">
                 <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary shrink-0">
-                        김
+                        
                     </div>
                     <div className="flex-1 min-w-0">
                         <p className="truncate text-sm font-medium text-sidebar-foreground">김철수</p>
